@@ -6,8 +6,8 @@
 const int baudrate = 9600;
 
 // pins assignation
-const int triggerPin = 7;
-const int echoPin = 8;
+const int triggerPin = 8;
+const int echoPin = 7;
 
 void setup()
 {
@@ -15,7 +15,7 @@ void setup()
   Serial.begin(baudrate);
 
   // configure Pins
-  pinMode(triggerPin, OUTPUT); //defining pin modes
+  pinMode(triggerPin, OUTPUT);
   pinMode(echoPin, INPUT);
 }
 
@@ -23,8 +23,9 @@ void loop()
 {
   float distance = getDistance();
 
-  Serial.print(distance); // send the current value stored in distance to the serial monitor
-  Serial.println("cm");
+  Serial.print(distance);
+  Serial.println(" cm");
   Serial.println();
+  
   delay(500); // delay for stability (in ms)
 }
