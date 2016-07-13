@@ -58,24 +58,14 @@ void loop()
   drawD();
   drawE();
   drawF();
-  drawG();
   drawH();
   drawI();
   drawJ();
-  drawK();
   drawL();
-  drawM();
   drawN();
   drawO();
   drawP();
-  drawQ();
-  drawR();
-  drawS();
   drawT();
   drawU();
-  drawV();
-  drawW();
-  drawX();
   drawY();
-  drawZ();
 }
