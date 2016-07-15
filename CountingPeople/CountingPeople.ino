@@ -224,6 +224,45 @@ void print9()
              QH, LOW);
 }
 
+void print_nb(int nb)
+{
+  if (nb == 0) print0();
+  else if (nb == 1) print1();
+  else if (nb == 2) print2();
+  else if (nb == 3) print3();
+  else if (nb == 4) print4();
+  else if (nb == 5) print5();
+  else if (nb == 6) print6();
+  else if (nb == 7) print7();
+  else if (nb == 8) print8();
+  else if (nb == 9) print9();
+  else printE();
+}
+
+void printE()
+{
+  printValue(QA, HIGH,
+             QB, LOW,
+             QC, LOW,
+             QD, HIGH,
+             QE, HIGH,
+             QF, HIGH,
+             QG, HIGH,
+             QH, LOW);
+}
+
+void printC()
+{
+  printValue(QA, HIGH,
+             QB, LOW,
+             QC, LOW,
+             QD, HIGH,
+             QE, HIGH,
+             QF, HIGH,
+             QG, LOW,
+             QH, LOW);
+}
+
 void setupHC_SR04()
 {
   pinMode(TRIGGER_PIN, OUTPUT);
@@ -251,73 +290,41 @@ void setup()
   startTime = millis();
 }
 
+float maxDist = -10000.F;
 float minDist = 10000.F;
+float delta = 0.F;
 int nb_people = 0;
+boolean state = HIGH;
 
 void loop()
 {
   float distance = getDistanceInCM();
-  if ((millis() - startTime) < CALIBRATION_TIME)
+  if (distance > 0.F)
   {
-    if (minDist > distance && distance > 0.F)
+    boolean isConfiguring = (millis() - startTime) < CALIBRATION_TIME;
+    if (isConfiguring)
     {
-      Serial.println();
-      Serial.print("old min dist: ");
-      Serial.print(minDist);
-      Serial.println(" cm");
-      Serial.print("new min: ");
-      Serial.print(distance);
-      Serial.println(" cm");
-      Serial.println();
-      minDist = distance;
+      if (minDist > distance) minDist = distance;
+      if (maxDist < distance) maxDist = distance;
+      printC();
     }
-    Serial.print(".");
+    else
+    {
+      if ((distance < (minDist - delta*10)) && (state == HIGH))
+      {
+        //Serial.println("");
+        state = LOW;
+      }
+      else if ((distance >= minDist) && (state == LOW))
+      {
+        state = HIGH;
+        nb_people += 1;
+      }
+      print_nb(nb_people);
+    }
+    
+  } else {
+    printE();
   }
-  else
-  {
-    if (distance < minDist)
-    {
-      nb_people += 1;
-    }
-    Serial.print(nb_people);
-    Serial.println(" people");
-    Serial.println();
-    if (nb_people == 0)
-    {
-      print0();
-    } else if (nb_people == 1)
-    {
-      print1();
-    } else if (nb_people == 2)
-    {
-      print2();
-    } else if (nb_people == 3)
-    {
-      print3();
-    } else if (nb_people == 4)
-    {
-      print4();
-    } else if (nb_people == 5)
-    {
-      print5();
-    } else if (nb_people == 6)
-    {
-      print6();
-    }else if (nb_people == 7)
-    {
-      print7();
-    } else if (nb_people == 8)
-    {
-      print8();
-    } else if (nb_people == 9)
-    {
-      print9();
-    }
-  }
-  /*
-    Serial.print(distance);
-    Serial.println(" cm");
-    Serial.println();
-  */
-  delay(500);
+  delay(250);
 }
