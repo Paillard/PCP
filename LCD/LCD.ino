@@ -115,7 +115,7 @@ void loop() {
   */
   if (distance >= 0.F)
   {
-    if ((distance < (minDist - delta * 10)) && (state == HIGH))
+    if ((distance < (minDist - delta * 1.70)) && (state == HIGH))
     {
       state = LOW;
     }
